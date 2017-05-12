@@ -1,0 +1,3 @@
+/home/victor/zwd/lit_test/static_test/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/victor/zwd/lit_test/static_test/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/victor/zwd/lit_test/static_test/cmake-build-debug/CMakeFiles/static_test.dir

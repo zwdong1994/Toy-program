@@ -1,0 +1,1 @@
+/usr/bin/c++   -g   CMakeFiles/static_test.dir/main.cpp.o CMakeFiles/static_test.dir/file1.c.o  -o static_test 
