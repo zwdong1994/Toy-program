@@ -275,6 +275,7 @@ void encode_bch(struct bch_control *bch, const uint8_t *data,
 		r[l] = p0[l]^p1[l]^p2[l]^p3[l];
 	}
 	memcpy(bch->ecc_buf, r, sizeof(r));
+    printf("%lu\n", sizeof(r));
 
 	/* process last unaligned bytes */
 	if (len)
