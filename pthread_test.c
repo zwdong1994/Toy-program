@@ -33,27 +33,27 @@ int main(int argc, char **argv)
     sleep(1);
 
     //修改
-    //pthread_mutex_lock(&mutex);
+//    pthread_mutex_lock(&mutex);
 
     i = 2;
     pthread_cond_signal(&cond_l);
     printf("release signal\n");
     sleep(1);
 
-/*    i = 2;
+//    i = 2;
     pthread_cond_signal(&cond_l);
     printf("release signal\n");
     sleep(1);
 
-    i = 2;
+//    i = 2;
     pthread_cond_signal(&cond_l);
     printf("release signal\n");
     sleep(1);
 
-    i = 2;
+//    i = 2;
     pthread_cond_signal(&cond_l);
     printf("release signal\n");
-    sleep(1);*/
+    sleep(1);
 
     pthread_join(pid1, NULL );
     pthread_join(pid2, NULL );
