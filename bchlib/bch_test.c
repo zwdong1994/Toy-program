@@ -5,7 +5,7 @@
 
 int main(){
     struct bch_control *bc;
-    int m = 8, t = 13;
+    int m = 8, t = 7;
     unsigned int prim_poly = 0;
     bc = init_bch(m, t, 0);
     char data[4096] = "dsfajsdklfjas";

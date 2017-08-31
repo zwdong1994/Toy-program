@@ -5,7 +5,7 @@
 
 int main(){
     struct bch_control *bc;
-    int m = 13, t = 18;
+    int m = 8, t = 7;
     unsigned int prim_poly = 32;
     bc = init_bch(m, t, 0);
     char data[4096] = "dsfajsdklfjas";
@@ -17,7 +17,7 @@ int main(){
             encode_bch(bc, data, 4096, result);
         else
             encode_bch(bc, data2, 4096, result);
-        printf("%d\n%s\n", (int)strlen(result), result);
+        printf("%d\n%s\n", (int)strlen((char *)result), result);
 
     }
     return 0;

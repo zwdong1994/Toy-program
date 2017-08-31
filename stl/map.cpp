@@ -12,6 +12,7 @@ int main(){
     test_info.str = "sdfafd";
     std::string id = "123";
     test_map[id] = &test_info;
+    std::cout<<test_map.max_size()<<std::endl;
     if(test_map[id] == NULL){
         std::cout<<id<<" not exist"<<std::endl;
     }
@@ -24,5 +25,9 @@ int main(){
     if(test_map["345"] == NULL){
         std::cout<<"345 not exist"<<std::endl;
     }
+    if(test_map["123"] == NULL){
+        std::cout<<"345 not exist"<<std::endl;
+    }
+
     return 0;
 }

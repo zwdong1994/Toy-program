@@ -1,0 +1,2 @@
+new_delete_time.cpp|36 col 17 warning| multi-character character constant [-Wmultichar]
+new_delete_time.cpp|36 col 15 warning| overflow in implicit constant conversion [-Woverflow]
