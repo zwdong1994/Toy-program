@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <aio.h>
 #include <stdlib.h>
 #include <sys/types.h>
 #include <stdint.h>
@@ -18,12 +19,15 @@ double get_time(void) {
 
 
 int main(int argc, char **argv){
-    char buf_write[8193];
-    char buf_read[12288];
+    char *buf_write;
+    char *buf_read;
     char dev_name[30];
     char length_str[20];
     char address_str[20];
     char command_str[10];
+
+    posix_memalign((void**)&buf_write, getpagesize(), 10240);
+    posix_memalign((void**)&buf_read, getpagesize(), 10240);
 
 
     struct aiocb64 read_aio;
@@ -42,7 +46,7 @@ int main(int argc, char **argv){
     sscanf(address_str, "%lu", &address);
 
     strcpy(dev_name, argv[1]);
-    int fd = open(dev_name, O_RDWR|O_DIRECT);
+    int fd = open(dev_name, O_RDWR | O_DIRECT | O_LARGEFILE, 0755);
     if(fd == -1){
         printf("Open device error!\n");
         return -1;
@@ -63,9 +67,11 @@ int main(int argc, char **argv){
     write_aio.aio_nbytes = length;
     write_aio.aio_offset = address;
 
-    aio_write64(&write_aio);
-    while(EINPROGRESS == aio_error64(&write_aio));
-    len = aio_return64(&write_aio);
+/*    aio_read64(&read_aio);
+    while(EINPROGRESS == aio_error64(&read_aio));
+    int len = aio_return64(&read_aio);
+*/
+    int len = pread(fd, buf_read, length, address);
     if(len != 4096) {
 	memcpy(command_str, buf_read, 10);
 	printf("%s\n", command_str);
@@ -83,6 +89,9 @@ int main(int argc, char **argv){
 		printf("id is %u, type is %d, length is %u\n", id, m, length);
 	}
     	printf("Error write! The len is: %d\n", len);
+	if(len == -1){
+		printf("%s   %d\n", strerror(errno), errno);
+	}
 	printf("read string: \n %s \n", buf_read);
 	exit(0);
     } else {
