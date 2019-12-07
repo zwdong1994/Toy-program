@@ -26,6 +26,10 @@ int main(int argc, char **argv){
     char command_str[10];
 
 
+    struct aiocb64 read_aio;
+    struct aiocb64 write_aio;
+    struct aiocb64 *cblist[1];
+
     double stat_t = 0.0, end_t = 0.0;
     
     unsigned long length;
@@ -38,7 +42,7 @@ int main(int argc, char **argv){
     sscanf(address_str, "%lu", &address);
 
     strcpy(dev_name, argv[1]);
-    int fd = open(dev_name, O_RDWR|O_SYNC);
+    int fd = open(dev_name, O_RDWR|O_DIRECT);
     if(fd == -1){
         printf("Open device error!\n");
         return -1;
@@ -47,7 +51,21 @@ int main(int argc, char **argv){
         buf_write[i] = ('a'+ (i % 26));
     }
 //    printf("%s\n", buf_write);
-    int len = pread(fd, buf_read, length, address);
+    write_aio.aio_buf = buf_write;
+    read_aio.aio_buf = buf_read;
+
+    read_aio.aio_fildes = fd;
+    read_aio.aio_nbytes = length;
+    read_aio.aio_offset = address;
+
+
+    write_aio.aio_fildes = fd;
+    write_aio.aio_nbytes = length;
+    write_aio.aio_offset = address;
+
+    aio_write64(&write_aio);
+    while(EINPROGRESS == aio_error64(&write_aio));
+    len = aio_return64(&write_aio);
     if(len != 4096) {
 	memcpy(command_str, buf_read, 10);
 	printf("%s\n", command_str);
