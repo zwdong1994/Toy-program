@@ -26,9 +26,6 @@ int main(int argc, char **argv){
     char address_str[20];
     char command_str[10];
 
-    posix_memalign((void**)&buf_write, getpagesize(), 10240);
-    posix_memalign((void**)&buf_read, getpagesize(), 10240);
-
 
     struct aiocb64 read_aio;
     struct aiocb64 write_aio;
@@ -44,6 +41,9 @@ int main(int argc, char **argv){
 
     sscanf(length_str, "%lu", &length);
     sscanf(address_str, "%lu", &address);
+    posix_memalign((void**)&buf_write, getpagesize(), length);
+    posix_memalign((void**)&buf_read, getpagesize(), length);
+
 
     strcpy(dev_name, argv[1]);
     int fd = open(dev_name, O_RDWR | O_DIRECT | O_LARGEFILE, 0755);
@@ -71,11 +71,14 @@ int main(int argc, char **argv){
     while(EINPROGRESS == aio_error64(&read_aio));
     int len = aio_return64(&read_aio);
 */
-    int len = pread(fd, buf_read, length, address);
+    uint8_t str[20] = "hahaha";
+    memcpy(buf_write, str, 20);
+    printf("%s\n", buf_write);
+    int len = pwrite(fd, buf_write, length, address);
     if(len != 4096) {
 	memcpy(command_str, buf_read, 10);
 	printf("%s\n", command_str);
-	if(strcmp(command_str, "Nothing!") == 0)
+	/*if(strcmp(command_str, "Nothing!") == 0)
 		printf("Nothing happened!\n");
 	else {
 		uint16_t id;
@@ -91,7 +94,7 @@ int main(int argc, char **argv){
     	printf("Error write! The len is: %d\n", len);
 	if(len == -1){
 		printf("%s   %d\n", strerror(errno), errno);
-	}
+	}*/
 	printf("read string: \n %s \n", buf_read);
 	exit(0);
     } else {
